@@ -378,7 +378,7 @@ class irc(threading.Thread):
 		mainthread = None
 		def mainloop():
 			while self.isconnected:
-				self.main()
+				self.main(self)
 				time.sleep(0.05)
 		if self.isconnected:
 			mainthread = threading.Thread(target=mainloop)
