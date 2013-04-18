@@ -275,6 +275,24 @@ class irc(threading.Thread):
 					break
 		self.msg[u"KICK"] += kick
 		
+		def nick(self, msg):
+			if msg.sender is not None:
+				oldnick, new = None, None
+				for user in self.users.values():
+					if user.nick == msg.sender.nick:
+						oldnick = self.users[user.nick].nick
+						self.users[msg.args[0]] = self.users.pop(user.nick)
+						self.users[msg.args[0]].nick = msg.args[0]
+						new = self.users[msg.args[0]]
+						break
+				for chan in self.chans.values():
+					for user in chan.users:
+						if user.nick == oldnick:
+							chan.users.remove(user)
+							chan.users.append(new)
+							break
+		self.msg[u"NICK"] += nick
+		
 		def _001(self, msg):
 			self.users[msg.args[0]] = irc.user(nick=msg.args[0])
 			self.send(self.msg["WHOIS"], msg.args[0])
