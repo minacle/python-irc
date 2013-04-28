@@ -147,7 +147,7 @@ class irc(threading.Thread):
 			return cls(command, args, sender, timestamp)
 	
 	
-	def __init__(self, network, user, *args, **kwargs):
+	def __init__(self, network, user, threaded=False, *args, **kwargs):
 		#supers
 		threading.Thread.__init__(self)
 		self.setDaemon(True)
@@ -159,62 +159,62 @@ class irc(threading.Thread):
 		self.users = {}
 		self._temp = {}
 		#define raw events
-		self.main = event() # args: irc
-		self.connecting = event() # args: irc
-		self.connected = event() # args: irc
-		self.failed = event() # args: irc
-		self.received = event() # args: irc, text
-		self.sent = event() # args: irc, text
+		self.main = event(threaded) # args: irc
+		self.connecting = event(threaded) # args: irc
+		self.connected = event(threaded) # args: irc
+		self.failed = event(threaded) # args: irc
+		self.received = event(threaded) # args: irc, text
+		self.sent = event(threaded) # args: irc, text
 		#define irc events
 		self.rpl = {}
 		for i in range(1, 999):
-			self.rpl[unicode("{:03}".format(i))] = event()
+			self.rpl[unicode("{:03}".format(i))] = event(threaded)
 		self.msg = {
-			u"PASS": event(),
-			u"NICK": event(),
-			u"USER": event(),
-			u"OPER": event(),
-			u"MODE": event(),
-			u"SERVICE": event(),
-			u"QUIT": event(),
-			u"SQUIT": event(),
-			u"JOIN": event(),
-			u"PART": event(),
-			u"TOPIC": event(),
-			u"NAMES": event(),
-			u"LIST": event(),
-			u"INVITE": event(),
-			u"KICK": event(),
-			u"PRIVMSG": event(),
-			u"NOTICE": event(),
-			u"MOTD": event(),
-			u"LUSERS": event(),
-			u"VERSION": event(),
-			u"STATS": event(),
-			u"LINKS": event(),
-			u"TIME": event(),
-			u"CONNECT": event(),
-			u"TRACE": event(),
-			u"ADMIN": event(),
-			u"INFO": event(),
-			u"SERVLIST": event(),
-			u"SQUERY": event(),
-			u"WHO": event(),
-			u"WHOIS": event(),
-			u"WHOWAS": event(),
-			u"KILL": event(),
-			u"PING": event(),
-			u"PONG": event(),
-			u"ERROR": event(),
-			u"AWAY": event(),
-			u"REHASH": event(),
-			u"DIE": event(),
-			u"RESTART": event(),
-			u"SUMMON": event(),
-			u"USERS": event(),
-			u"WALLOPS": event(),
-			u"USERHOST": event(),
-			u"ISON": event(),
+			u"PASS": event(threaded),
+			u"NICK": event(threaded),
+			u"USER": event(threaded),
+			u"OPER": event(threaded),
+			u"MODE": event(threaded),
+			u"SERVICE": event(threaded),
+			u"QUIT": event(threaded),
+			u"SQUIT": event(threaded),
+			u"JOIN": event(threaded),
+			u"PART": event(threaded),
+			u"TOPIC": event(threaded),
+			u"NAMES": event(threaded),
+			u"LIST": event(threaded),
+			u"INVITE": event(threaded),
+			u"KICK": event(threaded),
+			u"PRIVMSG": event(threaded),
+			u"NOTICE": event(threaded),
+			u"MOTD": event(threaded),
+			u"LUSERS": event(threaded),
+			u"VERSION": event(threaded),
+			u"STATS": event(threaded),
+			u"LINKS": event(threaded),
+			u"TIME": event(threaded),
+			u"CONNECT": event(threaded),
+			u"TRACE": event(threaded),
+			u"ADMIN": event(threaded),
+			u"INFO": event(threaded),
+			u"SERVLIST": event(threaded),
+			u"SQUERY": event(threaded),
+			u"WHO": event(threaded),
+			u"WHOIS": event(threaded),
+			u"WHOWAS": event(threaded),
+			u"KILL": event(threaded),
+			u"PING": event(threaded),
+			u"PONG": event(threaded),
+			u"ERROR": event(threaded),
+			u"AWAY": event(threaded),
+			u"REHASH": event(threaded),
+			u"DIE": event(threaded),
+			u"RESTART": event(threaded),
+			u"SUMMON": event(threaded),
+			u"USERS": event(threaded),
+			u"WALLOPS": event(threaded),
+			u"USERHOST": event(threaded),
+			u"ISON": event(threaded),
 		}
 		
 		#define initial event handlers

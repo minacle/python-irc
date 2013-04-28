@@ -7,7 +7,7 @@ import time
 network = irc.network("Ozinger")
 network.servers.append(irc.server("irc.ozinger.org", 6667))
 user = irc.user(nick="pyirctest")
-client = irc(network, user)
+client = irc(network, user, threaded=True)
 
 def recv(irc, text):
 	print "RECV << %s" % text
